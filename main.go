@@ -2,34 +2,64 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 )
 
-func main() {
-	fmt.Println(Hello("Crate"))
+const (
+	cacheDir       = "./cache"
+	remoteRegistry = "https://registry.npmjs.org"
+)
 
-	// Define a handler function for the "/" route
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, Go Web Server!")
-	})
-
-	// Start the HTTP server on port 8080
-	fmt.Println("Server starting on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
-	// Accept NPM requests
-	// TODO create simple webserver
-
-	// Filter out young packages
-
-	// Cache tarballs
-
-	// Return
+func countPathSegments(path string) int {
+	trimmedPath := strings.Trim(path, "/")
+	if trimmedPath == "" {
+		return 0
+	}
+	return len(strings.Split(trimmedPath, "/"))
 }
 
-func Hello(name string) string {
-	// Return a greeting that embeds the name in a message.
-	message := fmt.Sprintf("Hi, %v. Welcome!", name)
-	return message
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("method: %s url: %s", r.Method, r.URL.Path)
+
+	if countPathSegments(r.URL.Path) == 1 {
+		resp, _ := http.Get(remoteRegistry + r.URL.Path)
+
+		defer resp.Body.Close()
+		body, _ := io.ReadAll(resp.Body)
+		os.WriteFile(cacheDir+r.URL.Path+".json", body, os.FileMode(0644))
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(body)
+	} else if countPathSegments(r.URL.Path) == 3 && strings.HasSuffix(r.URL.Path, ".tgz") {
+		resp, _ := http.Get(remoteRegistry + r.URL.Path)
+		defer resp.Body.Close()
+		body, _ := io.ReadAll(resp.Body)
+		fileName := strings.Split(r.URL.Path, "/")
+
+		if err := os.MkdirAll(cacheDir+"/"+fileName[1], 0755); err != nil {
+			log.Fatal(err)
+		}
+		os.WriteFile(cacheDir+"/"+fileName[1]+"/"+fileName[3], body, os.FileMode(0644))
+
+	} else {
+		fmt.Fprintln(w, "Hello, World!")
+	}
+
+}
+
+func main() {
+	if err := os.MkdirAll(cacheDir, 0755); err != nil {
+		log.Fatal(err)
+	}
+
+	http.HandleFunc("/", homeHandler)
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
+
 }
