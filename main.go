@@ -14,18 +14,10 @@ const (
 	remoteRegistry = "https://registry.npmjs.org"
 )
 
-func countPathSegments(path string) int {
-	trimmedPath := strings.Trim(path, "/")
-	if trimmedPath == "" {
-		return 0
-	}
-	return len(strings.Split(trimmedPath, "/"))
-}
-
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("method: %s url: %s", r.Method, r.URL.Path)
 
-	if countPathSegments(r.URL.Path) == 1 {
+	if CountPathSegments(r.URL.Path) == 1 {
 		resp, _ := http.Get(remoteRegistry + r.URL.Path)
 
 		defer resp.Body.Close()
@@ -34,7 +26,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(body)
-	} else if countPathSegments(r.URL.Path) == 3 && strings.HasSuffix(r.URL.Path, ".tgz") {
+	} else if CountPathSegments(r.URL.Path) == 3 && strings.HasSuffix(r.URL.Path, ".tgz") {
 		resp, _ := http.Get(remoteRegistry + r.URL.Path)
 		defer resp.Body.Close()
 		body, _ := io.ReadAll(resp.Body)
