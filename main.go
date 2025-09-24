@@ -43,7 +43,12 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		if err := os.MkdirAll(cacheDir+"/"+fileName[1], 0755); err != nil {
 			log.Fatal(err)
 		}
-		os.WriteFile(cacheDir+"/"+fileName[1]+"/"+fileName[3], body, os.FileMode(0644))
+		filePath := cacheDir + "/" + fileName[1] + "/" + fileName[3]
+		os.WriteFile(filePath, body, os.FileMode(0644))
+
+		// serve the file from the os cache folder
+		w.Header().Set("Content-Type", "application/octet-stream")
+		http.ServeFile(w, r, filePath)
 
 	} else {
 		fmt.Fprintln(w, "Hello, World!")
