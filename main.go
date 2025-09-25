@@ -21,6 +21,7 @@ const (
 // health check endpoint
 // test everything
 // ban young package versions
+// todo handle timeouts
 
 func HandlePackageJsonRequest(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(remoteRegistry + r.URL.Path)
@@ -54,7 +55,8 @@ func HandlePackageJsonRequest(w http.ResponseWriter, r *http.Request) {
 	// TODO serve from cache only
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(body)
+	http.ServeFile(w, r, packageJsonFilePath)
+
 }
 func HandleTarballRequest(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(remoteRegistry + r.URL.Path)
