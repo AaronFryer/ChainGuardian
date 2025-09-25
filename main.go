@@ -87,7 +87,7 @@ func HandleTarballRequest(w http.ResponseWriter, r *http.Request) {
 	}
 	filePath := cacheDir + "/" + fileName[1] + "/" + fileName[3]
 
-	if err := os.WriteFile(cacheDir+r.URL.Path+".json", body, os.FileMode(0644)); err != nil {
+	if err := os.WriteFile(filePath, body, os.FileMode(0644)); err != nil {
 		log.Printf("Cache tarball write error: %v", err)
 	}
 
