@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/aaronfryer/crate/internal/config"
+	"github.com/aaronfryer/chainguardian/internal/config"
 )
 
 func SavePackageJSON(cfg *config.Config, path string, data []byte) error {

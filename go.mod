@@ -1,4 +1,4 @@
-module github.com/aaronfryer/crate
+module github.com/aaronfryer/chainguardian
 
 go 1.25.1
 

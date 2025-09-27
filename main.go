@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/aaronfryer/crate/internal/config"
-	"github.com/aaronfryer/crate/internal/httphandlers"
+	"github.com/aaronfryer/chainguardian/internal/config"
+	"github.com/aaronfryer/chainguardian/internal/httphandlers"
 )
 
 func main() {

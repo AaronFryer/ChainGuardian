@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aaronfryer/crate/internal/cache"
-	"github.com/aaronfryer/crate/internal/config"
+	"github.com/aaronfryer/chainguardian/internal/cache"
+	"github.com/aaronfryer/chainguardian/internal/config"
 )
 
 type HttpHandler struct {
