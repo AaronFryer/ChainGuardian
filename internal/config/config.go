@@ -10,11 +10,12 @@ import (
 )
 
 type Config struct {
-	CacheDir       string        `toml:"cache_dir"`
-	RemoteRegistry string        `toml:"remote_registry"`
-	HTTPPort       string        `toml:"http_port"`
-	MinPackageAge  time.Duration `toml:"-"`
-	MaxPackageAge  time.Duration `toml:"-"`
+	CacheDir       string            `toml:"cache_dir"`
+	RemoteRegistry string            `toml:"remote_registry"`
+	HTTPPort       string            `toml:"http_port"`
+	MinPackageAge  time.Duration     `toml:"-"`
+	MaxPackageAge  time.Duration     `toml:"-"`
+	Registries     map[string]string `toml:"registries"`
 
 	// Raw values from TOML
 	MinPackageAgeHours int64 `toml:"min_package_age"`
@@ -42,6 +43,8 @@ func Load() (*Config, error) {
 		log.Printf("Warning: Could not load config file, using defaults: %v", err)
 		return &DefaultConfig, nil
 	}
+
+	//fmt.Println("Private registry:", config.Registries["verdaccio"])
 
 	// Convert hours to duration
 	config.MinPackageAge = time.Duration(config.MinPackageAgeHours) * time.Hour

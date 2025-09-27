@@ -24,7 +24,13 @@ func New(cfg *config.Config) *HttpHandler {
 }
 
 func (h *HttpHandler) HandlePackageJSON(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(h.cfg.RemoteRegistry + r.URL.Path)
+	RemoteUrl := h.cfg.RemoteRegistry
+
+	if registryUrl, ok := h.cfg.Registries[strings.TrimPrefix(r.URL.Path, "/")]; ok {
+		RemoteUrl = registryUrl
+	}
+
+	resp, err := http.Get(RemoteUrl + r.URL.Path)
 
 	if err != nil {
 		http.Error(w, "Failed to fetch package info", http.StatusBadGateway)
@@ -71,7 +77,13 @@ func (h *HttpHandler) HandlePackageJSON(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *HttpHandler) HandleTarball(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(h.cfg.RemoteRegistry + r.URL.Path)
+	RemoteUrl := h.cfg.RemoteRegistry
+
+	if registryUrl, ok := h.cfg.Registries[strings.TrimPrefix(r.URL.Path, "/")]; ok {
+		RemoteUrl = registryUrl
+	}
+
+	resp, err := http.Get(RemoteUrl + r.URL.Path)
 
 	if err != nil {
 		http.Error(w, "Failed to fetch tarball", http.StatusBadGateway)
@@ -106,6 +118,7 @@ func (h *HttpHandler) CacheHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("method: %s url: %s", r.Method, r.URL.Path)
 
 	segments := strings.Count(r.URL.Path, "/")
+
 	switch {
 	case segments == 1:
 		h.HandlePackageJSON(w, r)
