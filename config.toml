@@ -1,0 +1,14 @@
+# Crate Configuration File
+
+# Directory settings
+cache_dir = "./cache"
+
+# Remote registry settings
+remote_registry = "https://registry.npmjs.org"
+
+# Server settings
+http_port = ":8080"
+
+# Package age settings (in hours)
+min_package_age = 1440   # 60 days (60 * 24)
+max_package_age = 131400 # 15 years (15 * 365 * 24)

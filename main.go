@@ -10,13 +10,22 @@ import (
 )
 
 func main() {
-	if err := os.MkdirAll(config.CacheDir, 0755); err != nil {
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatal("Failed to load configuration:", err)
+	}
+
+	print(cfg)
+
+	if err := os.MkdirAll(cfg.CacheDir, 0755); err != nil {
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("/", httphandlers.CacheHandler)
+	handler := httphandlers.New(cfg)
+	http.HandleFunc("/", handler.CacheHandler)
 
-	if err := http.ListenAndServe(config.HTTPPort, nil); err != nil {
+	log.Printf("Starting server on %s", cfg.HTTPPort)
+	if err := http.ListenAndServe(cfg.HTTPPort, nil); err != nil {
 		log.Fatal(err)
 	}
 }
