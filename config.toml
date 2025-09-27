@@ -1,5 +1,3 @@
-# Crate Configuration File
-
 # Directory settings
 cache_dir = "./cache"
 

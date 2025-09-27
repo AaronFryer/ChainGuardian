@@ -25,12 +25,13 @@ func New(cfg *config.Config) *HttpHandler {
 
 func (h *HttpHandler) HandlePackageJSON(w http.ResponseWriter, r *http.Request) {
 	RemoteUrl := h.cfg.RemoteRegistry
+	Url := strings.TrimPrefix(r.URL.Path, "/")
 
-	if registryUrl, ok := h.cfg.Registries[strings.TrimPrefix(r.URL.Path, "/")]; ok {
+	if registryUrl, ok := h.cfg.Registries[Url]; ok {
 		RemoteUrl = registryUrl
 	}
 
-	resp, err := http.Get(RemoteUrl + r.URL.Path)
+	resp, err := http.Get(RemoteUrl + "/" + Url)
 
 	if err != nil {
 		http.Error(w, "Failed to fetch package info", http.StatusBadGateway)
@@ -69,8 +70,9 @@ func (h *HttpHandler) HandlePackageJSON(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	packageJsonFilePath := h.cfg.CacheDir + r.URL.Path + ".json"
-	cache.SavePackageJSON(h.cfg, r.URL.Path, modifiedBody)
+	SanitizedPath := strings.ReplaceAll(Url, "/", "_")
+	packageJsonFilePath := h.cfg.CacheDir + "/" + SanitizedPath + ".json"
+	cache.SavePackageJSON(h.cfg, SanitizedPath, modifiedBody)
 
 	w.Header().Set("Content-Type", "application/json")
 	http.ServeFile(w, r, packageJsonFilePath)
@@ -78,12 +80,13 @@ func (h *HttpHandler) HandlePackageJSON(w http.ResponseWriter, r *http.Request) 
 
 func (h *HttpHandler) HandleTarball(w http.ResponseWriter, r *http.Request) {
 	RemoteUrl := h.cfg.RemoteRegistry
+	Url := strings.TrimPrefix(r.URL.Path, "/")
 
-	if registryUrl, ok := h.cfg.Registries[strings.TrimPrefix(r.URL.Path, "/")]; ok {
+	if registryUrl, ok := h.cfg.Registries[Url]; ok {
 		RemoteUrl = registryUrl
 	}
 
-	resp, err := http.Get(RemoteUrl + r.URL.Path)
+	resp, err := http.Get(RemoteUrl + "/" + Url)
 
 	if err != nil {
 		http.Error(w, "Failed to fetch tarball", http.StatusBadGateway)
@@ -106,11 +109,12 @@ func (h *HttpHandler) HandleTarball(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	SanitizedPath := strings.ReplaceAll(Url, "/", "_")
 	fileName := strings.Split(r.URL.Path, "/")
-	cache.SaveTarball(h.cfg, fileName[1], fileName[3], body)
+	cache.SaveTarball(h.cfg, fileName[1], SanitizedPath, body)
 
 	w.Header().Set("Content-Type", "application/octet-stream")
-	filePath := h.cfg.CacheDir + "/" + fileName[1] + "/" + fileName[3]
+	filePath := h.cfg.CacheDir + "/" + fileName[1] + "/" + SanitizedPath
 	http.ServeFile(w, r, filePath)
 }
 
@@ -122,7 +126,11 @@ func (h *HttpHandler) CacheHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case segments == 1:
 		h.HandlePackageJSON(w, r)
+	case segments == 2:
+		h.HandlePackageJSON(w, r)
 	case segments == 3 && strings.HasSuffix(r.URL.Path, ".tgz"):
+		h.HandleTarball(w, r)
+	case segments == 4 && strings.HasSuffix(r.URL.Path, ".tgz"):
 		h.HandleTarball(w, r)
 	default:
 		http.Error(w, "Unsupported request", http.StatusBadRequest)
