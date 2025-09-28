@@ -3,7 +3,7 @@
 
 Supply Guardian is a lightweight caching proxy for package registries (such as npm). It improves security, reliability, and performance by sitting between developers and upstream registries.
 
-The proxy caches downloaded packages locally for faster installs, reduces external dependency risks, and provides a central point for enforcing policies. Designed for simplicity and speed, it helps teams ensure consistent, reproducible builds while minimizing exposure to supply chain attacks.
+Supply Guardian caches downloaded packages locally for faster installs, reduces external dependency risks, and provides a central point for enforcing policies. Designed for simplicity and speed, it helps teams ensure consistent, reproducible builds while minimizing exposure to supply chain attacks.
 
 ## Features
 
@@ -17,57 +17,44 @@ The proxy caches downloaded packages locally for faster installs, reduces extern
 
 ## Installation
 
-Install my-project with npm
+Install my-project with git
 
 ```bash
-  npm install my-project
-  cd my-project
+  git clone https://github.com/AaronFryer/ChainGuardian.git
+  cd ChainGuardian
 ```
     
-## Run Locally
-
-Clone the project
-
+## Run
 ```bash
-  git clone https://link-to-project
+  go run .
 ```
 
-Go to the project directory
-
+## Run with Docker Compose
 ```bash
-  cd my-project
+  docker compose up -d
 ```
 
-Install dependencies
+## Build
 
 ```bash
-  npm install
+  go build .
 ```
-
-Start the server
-
-```bash
-  npm run start
-```
-
 
 ## Running Tests
 
 To run tests, run the following command
 
 ```bash
-  npm run test
+  go test .
 ```
 
 
-## Roadmap
+## Potential Roadmap
 
-- Additional browser support
-
-- Add more integrations
+- Authentication
 
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
 
