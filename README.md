@@ -52,7 +52,10 @@ To run tests, run the following command
 ## Potential Roadmap
 
 - Authentication
-
+- release.sh
+  - docker images
+  - checksums
+  - artifact signing
 
 ## License
 
