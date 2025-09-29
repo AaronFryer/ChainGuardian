@@ -30,8 +30,14 @@ Install my-project with git
 ```
 
 ## Run with Docker Compose
-```bash
-  docker compose up -d
+```yaml
+services:
+  chainguardian:
+    image: aaronfryer/chainguardian:latest
+    container_name: chainguardian
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
 ```
 
 ## Build
@@ -53,7 +59,6 @@ To run tests, run the following command
 
 - Authentication
 - release.sh
-  - docker images
   - checksums
   - artifact signing
 
