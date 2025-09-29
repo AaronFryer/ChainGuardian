@@ -11,13 +11,13 @@ Supply Guardian caches downloaded packages locally for faster installs, reduces 
 - ⚡ Local caching – speeds up installs by serving previously fetched packages.
 - 🌐 Multiple registries support – configurable upstream sources (default, private).
 - 📦 Transparent proxy – acts as a drop-in replacement for public registries.
-- 📑 Policy enforcement (optional) – block packages with postinstall scripts or version that are too young.
+- 📑 Policy enforcement – filter out potentially dangerous scripts and version that are too young.
 - 🛠️ Configurable in TOML – easy setup for cache directory, ports, and registries.
 
 
 ## Installation
 
-Install my-project with git
+Install with git
 
 ```bash
   git clone https://github.com/AaronFryer/ChainGuardian.git
@@ -30,8 +30,14 @@ Install my-project with git
 ```
 
 ## Run with Docker Compose
-```bash
-  docker compose up -d
+```yaml
+services:
+  chainguardian:
+    image: aaronfryer/chainguardian:latest
+    container_name: chainguardian
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
 ```
 
 ## Build
@@ -53,7 +59,6 @@ To run tests, run the following command
 
 - Authentication
 - release.sh
-  - docker images
   - checksums
   - artifact signing
 
