@@ -7,9 +7,9 @@ set -euo pipefail
 DIST_DIR="dist"
 CHANGELOG="CHANGELOG.md"
 DEFAULT_BRANCH="main"
-APP_NAME="ChainGuardian"  # Change this to your binary name
-DOCKER_USER="${DOCKER_USER:-mydockeruser}" # Docker Hub user/org
-DOCKER_REPO="${DOCKER_REPO:-myapp}"        # Docker Hub repo
+APP_NAME="ChainGuardian"
+DOCKER_USER="aaronfryer"
+DOCKER_REPO="chainguardian"
 
 # -----------------------
 # HELPERS
@@ -73,7 +73,8 @@ git push origin "$new"
 # -----------------------
 # BUILD BINARIES
 # -----------------------
-echo "➡️  Building binaries..."
+echo "➡️  Cleaning dist/ and building binaries..."
+rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
 
 GOOS=linux   GOARCH=amd64 go build -o "$DIST_DIR/$APP_NAME-linux-amd64"
