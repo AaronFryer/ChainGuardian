@@ -1,9 +1,9 @@
 
-# Supply Guardian
+# Chain Guardian
 
-Supply Guardian is a lightweight caching proxy for package registries (such as npm). It improves security, reliability, and performance by sitting between developers and upstream registries.
+Chain Guardian is a lightweight caching proxy for package registries (such as npm). It improves security, reliability, and performance by sitting between developers and upstream registries.
 
-Supply Guardian caches downloaded packages locally for faster installs, reduces external dependency risks, and provides a central point for enforcing policies. Designed for simplicity and speed, it helps teams ensure consistent, reproducible builds while minimizing exposure to supply chain attacks.
+Chain Guardian caches downloaded packages locally for faster installs, reduces external dependency risks, and provides a central point for enforcing policies. Designed for simplicity and speed, it helps teams ensure consistent, reproducible builds while minimizing exposure to supply chain attacks.
 
 ## Features
 
