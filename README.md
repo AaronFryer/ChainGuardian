@@ -11,13 +11,13 @@ Supply Guardian caches downloaded packages locally for faster installs, reduces 
 - ⚡ Local caching – speeds up installs by serving previously fetched packages.
 - 🌐 Multiple registries support – configurable upstream sources (default, private).
 - 📦 Transparent proxy – acts as a drop-in replacement for public registries.
-- 📑 Policy enforcement (optional) – block packages with postinstall scripts or version that are too young.
+- 📑 Policy enforcement – filter out potentially dangerous scripts and version that are too young.
 - 🛠️ Configurable in TOML – easy setup for cache directory, ports, and registries.
 
 
 ## Installation
 
-Install my-project with git
+Install with git
 
 ```bash
   git clone https://github.com/AaronFryer/ChainGuardian.git

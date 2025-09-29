@@ -62,6 +62,7 @@ func (h *HttpHandler) HandlePackageJSON(w http.ResponseWriter, r *http.Request) 
 	}
 
 	h.filterPackageVersions(packageData)
+	h.filterScripts(packageData)
 
 	modifiedBody, err := json.Marshal(packageData)
 	if err != nil {
@@ -168,4 +169,22 @@ func (h *HttpHandler) filterPackageVersions(packageData map[string]interface{}) 
 
 	packageData["time"] = filteredTime
 	packageData["versions"] = filteredVersions
+}
+
+func (h *HttpHandler) filterScripts(meta map[string]interface{}) {
+	if versions, ok := meta["versions"].(map[string]interface{}); ok {
+		for _, v := range versions {
+			if vmap, ok := v.(map[string]interface{}); ok {
+				if scripts, ok := vmap["scripts"].(map[string]interface{}); ok {
+					delete(scripts, "preinstall")
+					delete(scripts, "install")
+					delete(scripts, "postinstall")
+					if len(scripts) == 0 {
+						delete(vmap, "scripts")
+					}
+
+				}
+			}
+		}
+	}
 }

@@ -5,4 +5,5 @@
 - Added docker builds
 
 ## v0.0.3
-- Added dockercompose example
+- Added docker compose example
+- Filter out potentially dangerous scripts

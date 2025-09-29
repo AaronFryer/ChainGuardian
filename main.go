@@ -15,8 +15,6 @@ func main() {
 		log.Fatal("Failed to load configuration:", err)
 	}
 
-	print(cfg)
-
 	if err := os.MkdirAll(cfg.CacheDir, 0755); err != nil {
 		log.Fatal(err)
 	}
