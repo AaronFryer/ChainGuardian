@@ -53,7 +53,7 @@ new="v$major.$minor.$patch"
 # -----------------------
 # CHECK CHANGELOG HEADER
 # -----------------------
-if ! grep -q "^## \[$new\]" "$CHANGELOG"; then
+if ! grep -q "^## $new" "$CHANGELOG"; then
     abort "$CHANGELOG does not contain a header '## [$new]'. Please add it before releasing."
 fi
 
